@@ -19,11 +19,11 @@ blocks:
     dependencies:
       - Test
     task:
-      env_vars:
-        - name: RELEASE_IT
-          value: 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
+      env_vars: []
       jobs:
         - name: generate release
           commands:
             - npm install release-it
             - npx release-it
+      secrets:
+        - name: GITHUB_TOKEN
