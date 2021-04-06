@@ -10,6 +10,8 @@ blocks:
       jobs:
         - name: go test
           commands:
+            - sem-version go 1.16
+            - checkout
             - make install-deps
             - make test
     dependencies: []
