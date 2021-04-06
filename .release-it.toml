@@ -1,0 +1,7 @@
+[git]
+commitMessage = "chore(release): v${version}"
+requireUpstream = false
+requireCleanWorkingDir = false
+
+[github]
+release = true
