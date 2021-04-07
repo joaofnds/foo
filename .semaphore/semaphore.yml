@@ -27,7 +27,8 @@ blocks:
         - name: generate release
           commands:
             - checkout
-            - npm install --global semantic-release@15
-            - npx semantic-release --branches main
+            - sem-version node 14
+            - npm install --global semantic-release@17
+            - npx semantic-release
       secrets:
         - name: GITHUB_TOKEN
