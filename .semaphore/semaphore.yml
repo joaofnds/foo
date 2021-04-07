@@ -23,6 +23,7 @@ blocks:
       jobs:
         - name: generate release
           commands:
+            - checkout
             - npm install --global release-it
             - npx release-it --ci
       secrets:
