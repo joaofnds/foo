@@ -24,6 +24,6 @@ blocks:
         - name: generate release
           commands:
             - npm install release-it
-            - npx release-it
+            - npx release-it --ci
       secrets:
         - name: GITHUB_TOKEN
