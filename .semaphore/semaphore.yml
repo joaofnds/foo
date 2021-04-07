@@ -30,3 +30,6 @@ blocks:
           - git config --global user.email "semaphoreci@joaofnds.com"
           - git config --global user.name "semaphoreci"
           - checkout
+          - git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$SEMAPHORE_GIT_REPO_SLUG
+      secrets:
+        - name: GITHUB_TOKEN
