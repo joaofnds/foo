@@ -25,8 +25,6 @@ blocks:
           commands:
             - npm install --global release-it
             - npx release-it --ci
-      secrets:
-        - name: GITHUB_TOKEN
       prologue:
         commands:
           - git config --global user.email "semaphoreci@joaofnds.com"
