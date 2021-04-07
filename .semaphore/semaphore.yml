@@ -26,11 +26,8 @@ blocks:
       jobs:
         - name: generate release
           commands:
+            - checkout
             - npm install --global semantic-release@15
             - npx semantic-release --ci
-      prologue:
-        commands:
-          - checkout
-          - make gen-release
       secrets:
         - name: GITHUB_TOKEN
