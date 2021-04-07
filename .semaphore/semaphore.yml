@@ -15,3 +15,15 @@ blocks:
             - make install-deps
             - make test
     dependencies: []
+  - name: Release
+    dependencies:
+      - Test
+    task:
+      env_vars: []
+      jobs:
+        - name: generate release
+          commands:
+            - npm install release-it
+            - npx release-it
+      secrets:
+        - name: GITHUB_TOKEN
