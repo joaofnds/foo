@@ -23,7 +23,7 @@ blocks:
       jobs:
         - name: generate release
           commands:
-            - npm install release-it
-            - npx release-it --ci
+            - npm install --global release-it
+            - npm exec release-it --ci
       secrets:
         - name: GITHUB_TOKEN
