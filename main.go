@@ -10,13 +10,25 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/joaofnds/foo/config"
 	"github.com/joaofnds/foo/repo"
 )
 
 func main() {
 	log.Println("Starting the application...")
 
-	db, err := GetConn()
+	err := config.Parse()
+	if err != nil {
+		panic(err)
+	}
+
+	dbHost := config.GetString("postgres.host")
+	dbPort := config.GetString("postgres.port")
+	dbuser := config.GetString("postgres.username")
+	dbPwd := config.GetString("postgres.password")
+	dbName := config.GetString("postgres.database")
+
+	db, err := GetConn(dbHost, dbPort, dbuser, dbPwd, dbName)
 	if err != nil {
 		panic(err)
 	}
