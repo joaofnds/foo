@@ -1,7 +1,5 @@
 [git]
-# commitMessage = "chore(release): v${version}"
-requireUpstream = false
-requireCleanWorkingDir = false
+commitMessage = "chore(release): v${version}"
 
 [github]
-# release = true
+release = true
