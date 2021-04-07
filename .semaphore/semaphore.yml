@@ -23,10 +23,12 @@ blocks:
       jobs:
         - name: generate release
           commands:
-            - checkout
-            - git config --global user.email "semaphoreci@joaofnds.com"
-            - git config --global user.name "semaphoreci"
             - npm install --global release-it
             - npx release-it --ci
       secrets:
         - name: GITHUB_TOKEN
+      prologue:
+        commands:
+          - git config --global user.email "semaphoreci@joaofnds.com"
+          - git config --global user.name "semaphoreci"
+          - checkout
