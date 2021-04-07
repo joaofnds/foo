@@ -28,6 +28,6 @@ blocks:
           commands:
             - checkout
             - npm install --global semantic-release@15
-            - npx semantic-release
+            - npx semantic-release --branches main
       secrets:
         - name: GITHUB_TOKEN
