@@ -2,20 +2,22 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/joaofnds/foo/config"
+	"github.com/joaofnds/foo/logger"
 	"github.com/joaofnds/foo/repo"
 )
 
 func main() {
-	log.Println("Starting the application...")
+	logger.InfoLogger().Println("starting the application...")
 
 	err := config.Parse()
 	if err != nil {
@@ -34,33 +36,47 @@ func main() {
 	}
 	defer db.Close()
 
-	host, _ := os.Hostname()
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		names, err := repo.GetAll(db)
-		if err != nil {
-			w.WriteHeader(500)
-			return
-		}
-
-		namesConcated := strings.Join(names, ", ")
-		fmt.Fprintf(w, "[%s] names: %s", host, namesConcated)
-	})
-
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(200)
-	})
+	http.HandleFunc("/", rootHandler(db))
+	http.HandleFunc("/health", healthHandler)
 
 	s := http.Server{Addr: ":80"}
 	go func() {
-		log.Fatal(s.ListenAndServe())
+		logger.InfoLogger().Println("starting the server")
+		logger.ErrorLogger().Fatal(s.ListenAndServe())
 	}()
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 	<-signalChan
 
-	log.Println("Shutdown signal received, exiting...")
+	logger.InfoLogger().Println("shutdown signal received, exiting...")
 
 	s.Shutdown(context.Background())
+}
+
+func rootHandler(db *sql.DB) func(http.ResponseWriter, *http.Request) {
+	host, _ := os.Hostname()
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer trackTime(time.Now(), "rootHandler")
+
+		names, err := repo.GetAll(db)
+		if err != nil {
+			logger.ErrorLogger().Printf("failed to get things from the database: %+v\n", err)
+			w.WriteHeader(500)
+			return
+		}
+
+		namesConcated := strings.Join(names, ", ")
+		fmt.Fprintf(w, "[%s] names: %s", host, namesConcated)
+	}
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
+}
+
+func trackTime(start time.Time, funcName string) {
+	elapsed := time.Since(start)
+	logger.InfoLogger().Printf("finished %s in %s\n", funcName, elapsed)
 }
