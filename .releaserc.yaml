@@ -1,9 +1,12 @@
 branches:
   - main
+  - name: staging
+    channel: staging
+    prerelease: dev
 
 tagFormat: "${version}"
 
 plugins:
-  - '@semantic-release/commit-analyzer'
-  - '@semantic-release/release-notes-generator'
-  - '@semantic-release/github'
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/github"

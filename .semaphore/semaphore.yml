@@ -5,7 +5,7 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Test
+  - name: test
     dependencies: []
     task:
       jobs:
@@ -18,9 +18,11 @@ blocks:
       env_vars:
         - name: GO111MODULE
           value: "on"
-  - name: Release
+    run:
+      when: branch = 'main' or branch = 'staging'
+  - name: release
     dependencies:
-      - Test
+      - test
     task:
       env_vars: []
       jobs:
@@ -32,3 +34,19 @@ blocks:
             - npx semantic-release
       secrets:
         - name: GITHUB_TOKEN
+    run:
+      when: branch = 'main' or branch = 'staging'
+  - name: build image
+    dependencies: []
+    run:
+      when: tag =~ '.*'
+    task:
+      jobs:
+        - name: docker build
+          commands:
+            - checkout
+            - echo $DOCKERHUB_PASSWORD | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            - "docker build -t joaofnds/foo:$SEMAPHORE_GIT_TAG_NAME ."
+            - "docker push joaofnds/foo:$SEMAPHORE_GIT_TAG_NAME"
+      secrets:
+        - name: docker-login
