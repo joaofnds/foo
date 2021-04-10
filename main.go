@@ -68,7 +68,7 @@ func rootHandler(db *sql.DB) func(http.ResponseWriter, *http.Request) {
 		}
 
 		namesConcated := strings.Join(names, ", ")
-		fmt.Fprintf(w, "[%s] names: %s", host, namesConcated)
+		fmt.Fprintf(w, "[%s] ids: %s", host, namesConcated)
 	}
 }
 
