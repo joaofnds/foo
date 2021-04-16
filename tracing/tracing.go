@@ -6,6 +6,7 @@ import (
 
 	opentracing "github.com/opentracing/opentracing-go"
 	jaeger "github.com/uber/jaeger-client-go"
+	jaegercfg "github.com/uber/jaeger-client-go/config"
 	config "github.com/uber/jaeger-client-go/config"
 )
 
@@ -13,6 +14,10 @@ import (
 func InitTracer(service string) (opentracing.Tracer, io.Closer) {
 	cfg := &config.Configuration{
 		ServiceName: service,
+		Sampler: &jaegercfg.SamplerConfig{
+			Type:  jaeger.SamplerTypeConst,
+			Param: 1,
+		},
 		Reporter: &config.ReporterConfig{
 			LogSpans: true,
 		},
