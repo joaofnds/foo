@@ -2,10 +2,10 @@ package logger
 
 import (
 	"log"
-	"os"
-)
 
-const logFlags = log.Ldate | log.Ltime | log.LUTC | log.Lshortfile | log.Lmsgprefix
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
 
 var (
 	infoLogger    *log.Logger
@@ -15,10 +15,11 @@ var (
 )
 
 func init() {
-	infoLogger = log.New(os.Stdout, "INFO: ", logFlags)
-	debugLogger = log.New(os.Stdout, "DEBUG: ", logFlags)
-	warningLogger = log.New(os.Stdout, "WARNING: ", logFlags)
-	errorLogger = log.New(os.Stderr, "ERROR: ", logFlags)
+	logger, _ := zap.NewProduction()
+	infoLogger, _ = zap.NewStdLogAt(logger, zapcore.InfoLevel)
+	debugLogger, _ = zap.NewStdLogAt(logger, zapcore.DebugLevel)
+	warningLogger, _ = zap.NewStdLogAt(logger, zapcore.WarnLevel)
+	errorLogger, _ = zap.NewStdLogAt(logger, zapcore.ErrorLevel)
 }
 
 func InfoLogger() *log.Logger {
