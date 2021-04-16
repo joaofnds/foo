@@ -9,15 +9,21 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-	"time"
 
 	"github.com/joaofnds/foo/config"
 	"github.com/joaofnds/foo/logger"
 	"github.com/joaofnds/foo/repo"
+	"github.com/joaofnds/foo/tracing"
+	"github.com/opentracing/opentracing-go"
 )
 
 func main() {
 	logger.InfoLogger().Println("starting the application...")
+
+	ctx := context.Background()
+	tracer, closer := tracing.InitTracer("asdf")
+	defer closer.Close()
+	opentracing.SetGlobalTracer(tracer)
 
 	err := config.Parse()
 	if err != nil {
@@ -36,8 +42,8 @@ func main() {
 	}
 	defer db.Close()
 
-	http.HandleFunc("/", rootHandler(db))
-	http.HandleFunc("/health", healthHandler)
+	http.HandleFunc("/", rootHandler(ctx, db))
+	http.HandleFunc("/health", healthHandler(ctx))
 
 	s := http.Server{Addr: ":80"}
 	go func() {
@@ -54,13 +60,14 @@ func main() {
 	s.Shutdown(context.Background())
 }
 
-func rootHandler(db *sql.DB) func(http.ResponseWriter, *http.Request) {
+func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *http.Request) {
 	host, _ := os.Hostname()
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer trackTime(time.Now(), "rootHandler")
+		span, newCtx := opentracing.StartSpanFromContext(ctx, "rootHandler")
+		defer span.Finish()
 
-		names, err := repo.GetAll(db)
+		names, err := repo.GetAll(newCtx, db)
 		if err != nil {
 			logger.ErrorLogger().Printf("failed to get things from the database: %+v\n", err)
 			w.WriteHeader(500)
@@ -72,11 +79,8 @@ func rootHandler(db *sql.DB) func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
-}
-
-func trackTime(start time.Time, funcName string) {
-	elapsed := time.Since(start)
-	logger.InfoLogger().Printf("finished %s in %s\n", funcName, elapsed)
+func healthHandler(ctx context.Context) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+	}
 }

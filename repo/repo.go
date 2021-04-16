@@ -1,13 +1,19 @@
 package repo
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+
+	"github.com/opentracing/opentracing-go"
 )
 
 const table = "foos"
 
-func GetAll(db *sql.DB) ([]string, error) {
+func GetAll(ctx context.Context, db *sql.DB) ([]string, error) {
+	span, _ := opentracing.StartSpanFromContext(ctx, "db get all")
+	defer span.Finish()
+
 	var names []string
 
 	query := fmt.Sprintf("select * from %s", table)
