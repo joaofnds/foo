@@ -75,7 +75,7 @@ func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *htt
 		}
 
 		namesConcated := strings.Join(names, ", ")
-		fmt.Fprintf(w, "[%s] ids: %s", host, namesConcated)
+		fmt.Fprintf(w, "[%s] IDs: %s", host, namesConcated)
 	}
 }
 
