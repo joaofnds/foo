@@ -4,3 +4,7 @@ postgres:
   username: postgres
   password: postgres
   database: foo
+
+jaeger:
+  reporter:
+    collectorEndpoint: "http://localhost:14268/api/traces"

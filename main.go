@@ -18,17 +18,17 @@ import (
 )
 
 func main() {
+	err := config.Parse()
+	if err != nil {
+		panic(err)
+	}
+
 	logger.InfoLogger().Println("starting the application...")
 
 	ctx := context.Background()
 	tracer, closer := tracing.InitTracer("asdf")
 	defer closer.Close()
 	opentracing.SetGlobalTracer(tracer)
-
-	err := config.Parse()
-	if err != nil {
-		panic(err)
-	}
 
 	dbHost := config.GetString("postgres.host")
 	dbPort := config.GetString("postgres.port")
