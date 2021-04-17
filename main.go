@@ -26,9 +26,9 @@ func main() {
 	logger.InfoLogger().Println("starting the application...")
 
 	ctx := context.Background()
-	tracer, closer := tracing.InitTracer("asdf")
+	host, _ := os.Hostname()
+	closer := tracing.InitTracer(host)
 	defer closer.Close()
-	opentracing.SetGlobalTracer(tracer)
 
 	dbHost := config.GetString("postgres.host")
 	dbPort := config.GetString("postgres.port")
@@ -64,8 +64,11 @@ func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *htt
 	host, _ := os.Hostname()
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		span, newCtx := opentracing.StartSpanFromContext(ctx, "rootHandler")
+		tracer := opentracing.GlobalTracer()
+		span := tracing.StartSpanFromRequest("rootHandler", tracer, r)
 		defer span.Finish()
+
+		newCtx := opentracing.ContextWithSpan(ctx, span)
 
 		names, err := repo.GetAll(newCtx, db)
 		if err != nil {
@@ -81,6 +84,10 @@ func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *htt
 
 func healthHandler(ctx context.Context) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		tracer := opentracing.GlobalTracer()
+		span := tracing.StartSpanFromRequest("healthHandler", tracer, r)
+		defer span.Finish()
+
 		w.WriteHeader(200)
 	}
 }
