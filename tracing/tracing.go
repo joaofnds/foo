@@ -3,11 +3,9 @@ package tracing
 import (
 	"fmt"
 	"io"
-	"net/http"
 
 	"github.com/joaofnds/foo/config"
 	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/ext"
 	jaeger "github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"github.com/uber/jaeger-client-go/zipkin"
@@ -46,22 +44,4 @@ func InitTracer(serviceName string) io.Closer {
 	}
 
 	return closer
-}
-
-func StartSpanFromRequest(opName string, tracer opentracing.Tracer, r *http.Request) opentracing.Span {
-	spanCtx, _ := spanCtxFromRequest(tracer, r)
-	return tracer.StartSpan(opName, ext.RPCServerOption(spanCtx))
-}
-
-// func inject(span opentracing.Span, request *http.Request) error {
-// 	return span.Tracer().Inject(
-// 		span.Context(),
-// 		opentracing.HTTPHeaders,
-// 		opentracing.HTTPHeadersCarrier(request.Header))
-// }
-
-func spanCtxFromRequest(tracer opentracing.Tracer, r *http.Request) (opentracing.SpanContext, error) {
-	return tracer.Extract(
-		opentracing.HTTPHeaders,
-		opentracing.HTTPHeadersCarrier(r.Header))
 }

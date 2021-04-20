@@ -60,17 +60,14 @@ func main() {
 	s.Shutdown(context.Background())
 }
 
-func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *http.Request) {
+func rootHandler(_ context.Context, db *sql.DB) func(http.ResponseWriter, *http.Request) {
 	host, _ := os.Hostname()
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		tracer := opentracing.GlobalTracer()
-		span := tracing.StartSpanFromRequest("rootHandler", tracer, r)
+		span, ctx := opentracing.StartSpanFromContext(r.Context(), "rootHandler")
 		defer span.Finish()
 
-		newCtx := opentracing.ContextWithSpan(ctx, span)
-
-		names, err := repo.GetAll(newCtx, db)
+		names, err := repo.GetAll(ctx, db)
 		if err != nil {
 			logger.ErrorLogger().Printf("failed to get things from the database: %+v\n", err)
 			w.WriteHeader(500)
@@ -82,10 +79,9 @@ func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *htt
 	}
 }
 
-func healthHandler(ctx context.Context) func(w http.ResponseWriter, r *http.Request) {
+func healthHandler(_ context.Context) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tracer := opentracing.GlobalTracer()
-		span := tracing.StartSpanFromRequest("healthHandler", tracer, r)
+		span, _ := opentracing.StartSpanFromContext(r.Context(), "healthHandler")
 		defer span.Finish()
 
 		w.WriteHeader(200)

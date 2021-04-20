@@ -11,7 +11,7 @@ import (
 const table = "foos"
 
 func GetAll(ctx context.Context, db *sql.DB) ([]string, error) {
-	span, _ := opentracing.StartSpanFromContext(ctx, "db get all")
+	span, _ := opentracing.StartSpanFromContext(ctx, "repo.GetAll")
 	defer span.Finish()
 
 	var names []string
