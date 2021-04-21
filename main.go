@@ -60,12 +60,14 @@ func main() {
 	s.Shutdown(context.Background())
 }
 
-func rootHandler(_ context.Context, db *sql.DB) func(http.ResponseWriter, *http.Request) {
+func rootHandler(ctx context.Context, db *sql.DB) func(http.ResponseWriter, *http.Request) {
 	host, _ := os.Hostname()
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		span, ctx := opentracing.StartSpanFromContext(r.Context(), "rootHandler")
+		span := tracing.StartSpanFromReq("rootHandler", opentracing.GlobalTracer(), r)
 		defer span.Finish()
+
+		ctx = opentracing.ContextWithSpan(ctx, span)
 
 		names, err := repo.GetAll(ctx, db)
 		if err != nil {
@@ -81,7 +83,7 @@ func rootHandler(_ context.Context, db *sql.DB) func(http.ResponseWriter, *http.
 
 func healthHandler(_ context.Context) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		span, _ := opentracing.StartSpanFromContext(r.Context(), "healthHandler")
+		span := tracing.StartSpanFromReq("healthHandler", opentracing.GlobalTracer(), r)
 		defer span.Finish()
 
 		w.WriteHeader(200)

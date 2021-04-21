@@ -3,6 +3,7 @@ package tracing
 import (
 	"fmt"
 	"io"
+	"net/http"
 
 	"github.com/joaofnds/foo/config"
 	opentracing "github.com/opentracing/opentracing-go"
@@ -44,4 +45,20 @@ func InitTracer(serviceName string) io.Closer {
 	}
 
 	return closer
+}
+
+func spanCtxFromReq(tracer opentracing.Tracer, r *http.Request) (opentracing.SpanContext, error) {
+	return tracer.Extract(
+		opentracing.HTTPHeaders,
+		opentracing.HTTPHeadersCarrier(r.Header),
+	)
+}
+
+func StartSpanFromReq(opName string, t opentracing.Tracer, r *http.Request) opentracing.Span {
+	spanCtx, err := spanCtxFromReq(t, r)
+	if err != nil {
+		return opentracing.StartSpan(opName)
+	}
+
+	return opentracing.StartSpan(opName, opentracing.ChildOf(spanCtx))
 }
