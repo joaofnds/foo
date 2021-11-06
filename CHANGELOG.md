@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/joaofnds/foo/compare/0.2.0...0.3.0) (2021-11-06)
+
+
+### Features
+
+* add helpful message ([f98bcf0](https://github.com/joaofnds/foo/commit/f98bcf04388e7e7bb4fa07ad9a4a518dfdc3528d))
+
 # [0.2.0](https://github.com/joaofnds/foo/compare/0.1.0...0.2.0) (2021-04-30)
 
 
