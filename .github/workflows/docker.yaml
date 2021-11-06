@@ -3,7 +3,9 @@ name: docker build and publish
 on:
   push:
     tags:
-      - '**'
+      - "**"
+    branches:
+      - "**"
   workflow_dispatch:
 
 jobs:
