@@ -37,7 +37,6 @@ jobs:
 
       - name: update staging image version
         uses: fjogeleit/yaml-update-action@master
-        if: ${{ github.ref == 'refs/heads/staging' }}
         env:
           VERSION: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
         with:
