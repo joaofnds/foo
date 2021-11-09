@@ -34,3 +34,16 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: update staging image version
+        uses: fjogeleit/yaml-update-action@master
+        if: ${{ github.ref == 'refs/heads/staging' }}
+        with:
+          repository: "joaofnds/foobar-infra"
+          valueFile: "foo-staging/deployment.yaml"
+          propertyPath: "spec.template.spec.containers[0].image"
+          value: '${{ steps.meta.output.labels["org.opencontainers.image.version"] }}'
+          branch: 'deploy/${{ steps.meta.output.labels["org.opencontainers.image.version"] }}'
+          targetBranch: main
+          createPR: true
+          message: 'Update foo-staging image to ${{ steps.meta.output.labels["org.opencontainers.image.version"] }}'
