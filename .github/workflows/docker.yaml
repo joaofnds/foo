@@ -57,7 +57,7 @@ jobs:
           updateFile: true
           commitChange: true
           branch: deploy/${{ env.VERSION }}
-          message: Update foo-staging image to ${{ env.VERSION }}
+          message: 'chore: update foo-staging image to ${{ env.VERSION }}'
           createPR: true
           targetBranch: main
           title: Bump foo-staging version to ${{ env.VERSION }}
