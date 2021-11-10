@@ -51,7 +51,7 @@ jobs:
           repository: joaofnds/foobar-infra
           masterBranchName: main
           valueFile: foo-staging/deployment.yaml
-          propertyPath: spec.template.spec.containers.0.image
+          propertyPath: metadata.name
           value: ${{ env.VERSION }}
           updateFile: true
           commitChange: true
