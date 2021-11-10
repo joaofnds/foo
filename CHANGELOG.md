@@ -1,3 +1,10 @@
+## [0.3.4](https://github.com/joaofnds/foo/compare/0.3.3...0.3.4) (2021-11-10)
+
+
+### Bug Fixes
+
+* remove message ([21ba7a5](https://github.com/joaofnds/foo/commit/21ba7a5d07daa3e2b7b086780c60688ae8311176))
+
 ## [0.3.3](https://github.com/joaofnds/foo/compare/0.3.2...0.3.3) (2021-11-10)
 
 
