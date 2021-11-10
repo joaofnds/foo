@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/joaofnds/foo/compare/0.3.5...0.4.0) (2021-11-10)
+
+
+### Features
+
+* **message:** remove part of the message ([de0d87a](https://github.com/joaofnds/foo/commit/de0d87ada698ffa243d8ab55933a404eef62fae7))
+
 ## [0.3.5](https://github.com/joaofnds/foo/compare/0.3.4...0.3.5) (2021-11-10)
 
 
