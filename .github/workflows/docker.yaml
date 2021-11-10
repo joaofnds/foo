@@ -50,7 +50,7 @@ jobs:
           workDir: foobar-infra
           repository: "joaofnds/foobar-infra"
           valueFile: "foo-staging/deployment.yaml"
-          propertyPath: "spec.template.spec.containers[0].image"
+          propertyPath: "spec.template.spec.containers.0.image"
           value: ${{ env.VERSION }}
           branch: 'deploy/${{ env.VERSION }}'
           targetBranch: main
