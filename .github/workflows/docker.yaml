@@ -46,13 +46,14 @@ jobs:
         uses: fjogeleit/yaml-update-action@master
         env:
           VERSION: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          IMAGE: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
         with:
           workDir: foobar-infra
           repository: joaofnds/foobar-infra
           masterBranchName: main
           valueFile: foo-staging/deployment.yaml
-          propertyPath: metadata.name
-          value: ${{ env.VERSION }}
+          propertyPath: spec.template.spec.containers.0.image
+          value: ${{ env.IMAGE }}
           updateFile: true
           commitChange: true
           branch: deploy/${{ env.VERSION }}
