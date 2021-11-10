@@ -53,9 +53,9 @@ jobs:
           valueFile: foo-staging/deployment.yaml
           propertyPath: spec.template.spec.containers.0.image
           value: ${{ env.VERSION }}
-          branch: main
+          branch: deploy/${{ env.VERSION }}
           targetBranch: main
-          createPR: true
           message: Update foo-staging image to ${{ env.VERSION }}
+          createPR: true
           title: Bump foo-staging version to ${{ env.VERSION }}
           token: ${{ secrets.GH_TOKEN }}
