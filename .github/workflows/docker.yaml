@@ -49,6 +49,7 @@ jobs:
         with:
           workDir: foobar-infra
           repository: "joaofnds/foobar-infra"
+          masterBranchName: main
           valueFile: "foo-staging/deployment.yaml"
           propertyPath: "spec.template.spec.containers.0.image"
           value: ${{ env.VERSION }}
