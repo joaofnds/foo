@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/joaofnds/foo/compare/0.3.0...0.3.1) (2021-11-10)
+
+
+### Bug Fixes
+
+* remove db conn print ([02d17db](https://github.com/joaofnds/foo/commit/02d17db947c16f80ca1585c4cd9bf9ba8e7d964f))
+
 ## [0.3.1-dev.1](https://github.com/joaofnds/foo/compare/0.3.0...0.3.1-dev.1) (2021-11-09)
 
 
