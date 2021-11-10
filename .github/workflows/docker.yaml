@@ -54,10 +54,11 @@ jobs:
           propertyPath: spec.template.spec.containers.0.image
           value: ${{ env.VERSION }}
           updateFile: true
+          commitChange: true
           branch: deploy/${{ env.VERSION }}
-          targetBranch: main
           message: Update foo-staging image to ${{ env.VERSION }}
           createPR: true
-          labels: chore
+          targetBranch: main
           title: Bump foo-staging version to ${{ env.VERSION }}
+          labels: chore
           token: ${{ secrets.GH_TOKEN }}
