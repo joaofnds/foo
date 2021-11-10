@@ -1,7 +1,7 @@
 name: docker build and publish
 
 on:
-  create:
+  push:
     tags:
       - "**"
   workflow_dispatch:
