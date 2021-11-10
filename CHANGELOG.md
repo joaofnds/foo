@@ -1,3 +1,10 @@
+## [0.3.5](https://github.com/joaofnds/foo/compare/0.3.4...0.3.5) (2021-11-10)
+
+
+### Bug Fixes
+
+* add helpful message ([9c8e85c](https://github.com/joaofnds/foo/commit/9c8e85cc84de156bbbb7880147183fa8cc18366c))
+
 ## [0.3.4](https://github.com/joaofnds/foo/compare/0.3.3...0.3.4) (2021-11-10)
 
 
