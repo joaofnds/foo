@@ -48,12 +48,13 @@ jobs:
           VERSION: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
         with:
           workDir: foobar-infra
-          repository: "joaofnds/foobar-infra"
+          repository: joaofnds/foobar-infra
           masterBranchName: main
-          valueFile: "foo-staging/deployment.yaml"
-          propertyPath: "spec.template.spec.containers.0.image"
+          valueFile: foo-staging/deployment.yaml
+          propertyPath: spec.template.spec.containers.0.image
           value: ${{ env.VERSION }}
-          branch: 'deploy/${{ env.VERSION }}'
+          branch: deploy
           targetBranch: main
           createPR: true
-          message: 'Update foo-staging image to ${{ env.VERSION }}'
+          message: Update foo-staging image to ${{ env.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
